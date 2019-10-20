@@ -4,6 +4,7 @@ use std::fs::File;
 use std::io::BufReader;
 use std::io::prelude::*;
 use std::fs::OpenOptions;
+use std::error::Error;
 
 
 
@@ -14,15 +15,54 @@ fn main() {
     let mut output: File;
 
     args.next().unwrap();
-    input = BufReader::new(File::open(args.next().expect("Not enough arguments.")).unwrap());
-    output = OpenOptions::new()
+
+    let input_arg = match args.next() {
+
+        Some(arg) => arg,
+        None => String::from(""),
+
+    };
+
+    if input_arg == "" {
+        println!("E: Not enough arguments.");
+        return;
+    }
+
+    input = BufReader::new(File::open(input_arg).unwrap());
+
+
+
+    let output_arg = match args.next() {
+
+        Some(arg) => arg,
+        None => String::from(""),
+
+    };
+
+    if output_arg == "" {
+        println!("E: Not enough arguments.");
+        return;
+    }    
+
+    output = match OpenOptions::new()
         .write(true)
         .truncate(true)
-        .open(args.next().expect("Not enough arguments."))
-        .unwrap();
+        .open(output_arg) {
+
+            Ok(file) => file,
+
+            Err(e) => {
+
+                println!("E: Could not open output file.\nReason: {}", e.description());
+                return;
+
+            }
+
+        };
     
     if args.next().is_some() {
-        panic!("Too many arguments.");
+        println!("E: Too many arguments.");
+        return;
     }
 
     let mut bit: u8 = 0;
