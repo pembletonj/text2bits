@@ -27,6 +27,10 @@ fn main() {
         println!("E: Not enough arguments.");
         return;
     }
+    else if input_arg == "--help" {
+        println!("Usage: text2bits (input file) (output file)");
+        return;
+    }
 
     input = BufReader::new(File::open(input_arg).unwrap());
 
@@ -42,7 +46,7 @@ fn main() {
     if output_arg == "" {
         println!("E: Not enough arguments.");
         return;
-    }    
+    }
 
     output = match OpenOptions::new()
         .write(true)
