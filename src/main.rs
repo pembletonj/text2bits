@@ -34,8 +34,6 @@ fn main() {
 
     input = BufReader::new(File::open(input_arg).unwrap());
 
-
-
     let output_arg = match args.next() {
 
         Some(arg) => arg,
